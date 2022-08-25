@@ -56,20 +56,9 @@ export class MongoService extends ResponseService {
     }
 
     public async getQuery(collection, query, select = null) {
-        try {
-            const find = await this.connection.then(db => {
-                return db.collection(collection).findOne(query, { fields: select })
-            })
-            if(find !== null) {
-                this.responseMongo = this.responseOK(find);
-            } else {
-                this.responseMongo = this.responseOK({}, 'La consulta no encontro datos');
-            }
-        } catch (error) {
-            this.responseMongo = this.responseError(error.toString());
-        } 
-        
-        return this.responseMongo;
+        return await this.connection.then(db => {
+                return db.collection(collection).findOne(query, { fields: select });   
+            });
     }
 
     public async create(collection, data) {
@@ -168,5 +157,13 @@ export class MongoService extends ResponseService {
         });
     }
 
+    public async aggregate(collection,query,group){
+        return this.connection.then(db => {
+            return db.collection(collection).aggregate([
+                { $match: query },
+                group
+            ]).toArray()
+        });
+    }
 }
 
