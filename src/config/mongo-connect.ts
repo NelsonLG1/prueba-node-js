@@ -12,7 +12,6 @@ function connect() {
         connection = new Promise((resolve, reject) => {
             // si existe devuelva el error como reject
             client.connect(function (err: any) { !err ? resolve(client.db(nameBD.toString())) : reject(err) })
-            console.log('Base de datos Conectada');
         })
     }
     // si no existe la intancia entonces la creeo si escxiste no la creeo
