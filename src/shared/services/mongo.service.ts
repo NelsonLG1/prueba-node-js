@@ -31,6 +31,13 @@ export class MongoService extends ResponseService {
         return this.responseMongo;
     }
 
+
+    public async getAllCount(collection, query) {
+        return await this.connection.then(db => {
+            return db.collection(collection).find(query).toArray()
+        });
+    }
+
     public async get(collection, id, select = null) {
         try {
             const find = await this.connection.then(db => {
